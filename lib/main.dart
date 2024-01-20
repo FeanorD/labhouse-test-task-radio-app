@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:labhouse_test_task_radio_app/src/config/di/injection.dart';
 
 void main() {
+  setupDependencies();
   runApp(const RadioApp());
 }
 
