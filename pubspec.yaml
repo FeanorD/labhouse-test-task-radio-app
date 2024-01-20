@@ -11,8 +11,17 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
+
+  # DI
   injectable: ^2.3.2
   get_it: ^7.6.7
+
+  # Network
+  dio: ^5.4.0
+  retrofit: ^4.0.3
+  
+  json_annotation: ^4.8.1
+
 
 dev_dependencies:
   flutter_test:
@@ -21,6 +30,8 @@ dev_dependencies:
   flutter_lints: ^2.0.0
   injectable_generator:
   build_runner:
+  retrofit_generator:
+  json_serializable: ^6.7.1
 
 flutter:
   uses-material-design: true
