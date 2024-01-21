@@ -5,9 +5,13 @@ import '../../../common_widgets/error_view.dart';
 import '../../../common_widgets/loader.dart';
 import '../blocs/favorite_stations_bloc/favorite_stations_bloc.dart';
 import '../blocs/radio_stations_bloc/radio_stations_bloc.dart';
+import '../blocs/selected_station_cubit/selected_station_cubit.dart';
+import '../models/radio_station_model.dart';
+import '../utils/favorite_station_handler_mixin.dart';
 import '../widgets/radio_stations_list_view.dart';
 
-class AllRadioStationsScreen extends StatelessWidget {
+class AllRadioStationsScreen extends StatelessWidget
+    with FavoriteStationsHandlerMixin {
   const AllRadioStationsScreen({super.key});
 
   @override
@@ -18,6 +22,9 @@ class AllRadioStationsScreen extends StatelessWidget {
         loaded: (state) => state.stations.map((e) => e.id).toList(),
         orElse: () => [],
       )
+    );
+    final selectedStation = context.select<SelectedStationCubit, RadioStation?>(
+      (value) => value.state.station,
     );
 
     return radioStationsState.when(
@@ -37,13 +44,12 @@ class AllRadioStationsScreen extends StatelessWidget {
         ).toList();
 
         return RadioStationsListView(
+          selectedRadioStation: selectedStation,
           radioStations: composedRadioStations,
-          // onRadioStationTap: _playRadioStation,
-          onAddStationToFavoritesTap: (station) => context.read<FavoriteStationsBloc>().add(
-              station.isFavorite
-                  ? FavoriteStationsEvent.removeStation(station.id)
-                  : FavoriteStationsEvent.addStation(station),
-          ),
+          onRadioStationTap: (station) =>
+              context.read<SelectedStationCubit>().selectStation(station),
+          onAddStationToFavoritesTap: (station) =>
+              toggleFavoriteStation(context, station),
           onLoadMore: () => context.read<RadioStationsBloc>()
               .add(const RadioStationsEvent.loadMore()),
         );
