@@ -41,7 +41,9 @@ class RadioStationTile extends StatelessWidget {
               ),
               IconButton(
                 onPressed: onFavoriteTap,
-                icon: const Icon(Icons.favorite_outline_rounded),
+                icon: radioStation.isFavorite
+                    ? const Icon(Icons.favorite_rounded)
+                    : const Icon(Icons.favorite_outline_rounded),
               ),
             ],
           ),
