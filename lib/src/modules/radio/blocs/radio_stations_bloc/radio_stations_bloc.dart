@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
@@ -45,7 +46,7 @@ class RadioStationsBloc extends Bloc<RadioStationsEvent, RadioStationsState> {
           Logger().e('Failed to load more radio stations', error: e);
         }
       }
-    });
+    }, transformer: droppable());
   }
 
   final RadioRepository _radioRepository;
