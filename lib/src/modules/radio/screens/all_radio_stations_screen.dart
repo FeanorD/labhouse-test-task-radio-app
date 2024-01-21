@@ -13,6 +13,12 @@ class AllRadioStationsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final radioStationsState = context.watch<RadioStationsBloc>().state;
+    final favoriteStationsIds = context.select<FavoriteStationsBloc, List<String>>(
+      (value) => value.state.maybeMap(
+        loaded: (state) => state.stations.map((e) => e.id).toList(),
+        orElse: () => [],
+      )
+    );
 
     return radioStationsState.when(
       loading: () => const Center(child: Loader()),
@@ -23,12 +29,25 @@ class AllRadioStationsScreen extends StatelessWidget {
               .add(const RadioStationsEvent.load()),
         ),
       ),
-      loaded: (radioStations, _) => RadioStationsListView(
-        radioStations: radioStations,
-        // onRadioStationTap: _playRadioStation,
-        onAddStationToFavoritesTap: (station) => context.read<FavoriteStationsBloc>()
-            .add(FavoriteStationsEvent.addStation(station)),
-      ),
+      loaded: (radioStations, _) {
+        final composedRadioStations = radioStations.map(
+          (station) => station.copyWith(
+            isFavorite: favoriteStationsIds.contains(station.id),
+          )
+        ).toList();
+
+        return RadioStationsListView(
+          radioStations: composedRadioStations,
+          // onRadioStationTap: _playRadioStation,
+          onAddStationToFavoritesTap: (station) => context.read<FavoriteStationsBloc>().add(
+              station.isFavorite
+                  ? FavoriteStationsEvent.removeStation(station.id)
+                  : FavoriteStationsEvent.addStation(station),
+          ),
+          onLoadMore: () => context.read<RadioStationsBloc>()
+              .add(const RadioStationsEvent.loadMore()),
+        );
+      },
     );
   }
 }
