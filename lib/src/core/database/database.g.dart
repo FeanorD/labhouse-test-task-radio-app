@@ -4,7 +4,7 @@ part of 'database.dart';
 
 // ignore_for_file: type=lint
 class $RadioStationsTableTable extends RadioStationsTable
-    with TableInfo<$RadioStationsTableTable, RadioStationsTableData> {
+    with TableInfo<$RadioStationsTableTable, RadioStationEntity> {
   @override
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
@@ -39,8 +39,7 @@ class $RadioStationsTableTable extends RadioStationsTable
   String get actualTableName => $name;
   static const String $name = 'radio_stations_table';
   @override
-  VerificationContext validateIntegrity(
-      Insertable<RadioStationsTableData> instance,
+  VerificationContext validateIntegrity(Insertable<RadioStationEntity> instance,
       {bool isInserting = false}) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
@@ -75,9 +74,9 @@ class $RadioStationsTableTable extends RadioStationsTable
   @override
   Set<GeneratedColumn> get $primaryKey => const {};
   @override
-  RadioStationsTableData map(Map<String, dynamic> data, {String? tablePrefix}) {
+  RadioStationEntity map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return RadioStationsTableData(
+    return RadioStationEntity(
       id: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}id'])!,
       name: attachedDatabase.typeMapping
@@ -95,13 +94,13 @@ class $RadioStationsTableTable extends RadioStationsTable
   }
 }
 
-class RadioStationsTableData extends DataClass
-    implements Insertable<RadioStationsTableData> {
+class RadioStationEntity extends DataClass
+    implements Insertable<RadioStationEntity> {
   final String id;
   final String name;
   final String iconUrl;
   final String audioStreamUrl;
-  const RadioStationsTableData(
+  const RadioStationEntity(
       {required this.id,
       required this.name,
       required this.iconUrl,
@@ -125,10 +124,10 @@ class RadioStationsTableData extends DataClass
     );
   }
 
-  factory RadioStationsTableData.fromJson(Map<String, dynamic> json,
+  factory RadioStationEntity.fromJson(Map<String, dynamic> json,
       {ValueSerializer? serializer}) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return RadioStationsTableData(
+    return RadioStationEntity(
       id: serializer.fromJson<String>(json['id']),
       name: serializer.fromJson<String>(json['name']),
       iconUrl: serializer.fromJson<String>(json['iconUrl']),
@@ -146,12 +145,12 @@ class RadioStationsTableData extends DataClass
     };
   }
 
-  RadioStationsTableData copyWith(
+  RadioStationEntity copyWith(
           {String? id,
           String? name,
           String? iconUrl,
           String? audioStreamUrl}) =>
-      RadioStationsTableData(
+      RadioStationEntity(
         id: id ?? this.id,
         name: name ?? this.name,
         iconUrl: iconUrl ?? this.iconUrl,
@@ -159,7 +158,7 @@ class RadioStationsTableData extends DataClass
       );
   @override
   String toString() {
-    return (StringBuffer('RadioStationsTableData(')
+    return (StringBuffer('RadioStationEntity(')
           ..write('id: $id, ')
           ..write('name: $name, ')
           ..write('iconUrl: $iconUrl, ')
@@ -173,15 +172,14 @@ class RadioStationsTableData extends DataClass
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is RadioStationsTableData &&
+      (other is RadioStationEntity &&
           other.id == this.id &&
           other.name == this.name &&
           other.iconUrl == this.iconUrl &&
           other.audioStreamUrl == this.audioStreamUrl);
 }
 
-class RadioStationsTableCompanion
-    extends UpdateCompanion<RadioStationsTableData> {
+class RadioStationsTableCompanion extends UpdateCompanion<RadioStationEntity> {
   final Value<String> id;
   final Value<String> name;
   final Value<String> iconUrl;
@@ -204,7 +202,7 @@ class RadioStationsTableCompanion
         name = Value(name),
         iconUrl = Value(iconUrl),
         audioStreamUrl = Value(audioStreamUrl);
-  static Insertable<RadioStationsTableData> custom({
+  static Insertable<RadioStationEntity> custom({
     Expression<String>? id,
     Expression<String>? name,
     Expression<String>? iconUrl,

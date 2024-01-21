@@ -3,7 +3,7 @@ import 'package:injectable/injectable.dart';
 import 'database.dart';
 
 @module
-class DatabaseDiModule {
+abstract class DatabaseDiModule {
   @lazySingleton
   AppDatabase getDatabase() => AppDatabase();
 }

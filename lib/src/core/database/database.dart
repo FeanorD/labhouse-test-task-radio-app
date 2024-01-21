@@ -10,6 +10,7 @@ import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart';
 
 part 'database.g.dart';
 
+@DataClassName('RadioStationEntity')
 class RadioStationsTable extends Table {
   TextColumn get id => text()();
   TextColumn get name => text()();
