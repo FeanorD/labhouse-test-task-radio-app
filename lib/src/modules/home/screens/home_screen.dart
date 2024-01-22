@@ -6,7 +6,7 @@ import '../../radio/blocs/selected_station_cubit/selected_station_cubit.dart';
 import '../../radio/models/radio_station_model.dart';
 import '../../radio/screens/all_radio_stations_screen.dart';
 import '../../radio/screens/favorite_stations_screen.dart';
-import '../../radio/utils/radio_player.dart';
+import '../../radio/utils/radio_player/radio_player.dart';
 import '../../radio/widgets/radio_controls_bottom_sheet.dart';
 import '../models/enums.dart';
 
@@ -49,7 +49,6 @@ class _HomeScreenState extends State<HomeScreen> {
       listener: (context, state) {
         if (state.station != null) {
           getIt<RadioPlayer>().playNewStation(state.station!);
-          // _playRadioStation(state.station!);
         }
       },
       child: Scaffold(

@@ -2,18 +2,17 @@ import 'package:injectable/injectable.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 
-import '../models/radio_station_model.dart';
+import '../../models/radio_station_model.dart';
+import 'radio_player_controls_interface.dart';
 
 @lazySingleton
-abstract interface class RadioPlayer {
-  Future<void> playNewStation(RadioStation radioStation);
-  Future<void> stop();
-  Future<void> pause();
-  Future<void> resume();
-  Future<void> setVolume(double volume);
-
+abstract class RadioPlayer implements RadioPlayerControls {
   Stream<bool> get playingStream;
   Stream<double> get volumeStream;
+  Stream<bool> get audioLoadingStream;
+
+  @disposeMethod
+  void dispose();
 
   @factoryMethod
   factory RadioPlayer(AudioPlayer player) = _RadioPlayer;
@@ -71,4 +70,18 @@ class _RadioPlayer implements RadioPlayer {
   @override
   Stream<double> get volumeStream => _audioPlayer.volumeStream;
 
+  @override
+  Stream<bool> get audioLoadingStream => _audioPlayer.processingStateStream
+      .map((state) => state.isLoading);
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+  }
+
+}
+
+extension _ProcessingStateX on ProcessingState {
+  bool get isLoading =>
+      this == ProcessingState.loading || this == ProcessingState.buffering;
 }

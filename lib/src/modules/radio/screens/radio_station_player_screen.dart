@@ -6,7 +6,7 @@ import '../../../config/di/injection.dart';
 import '../blocs/favorite_stations_bloc/favorite_stations_bloc.dart';
 import '../models/radio_station_model.dart';
 import '../utils/favorite_station_handler_mixin.dart';
-import '../utils/radio_player.dart';
+import '../utils/radio_player/radio_player.dart';
 import '../widgets/radio_station_logo.dart';
 
 class RadioStationPlayerScreen extends StatelessWidget
