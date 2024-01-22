@@ -13,26 +13,28 @@ import 'package:get_it/get_it.dart' as _i1;
 import 'package:injectable/injectable.dart' as _i2;
 import 'package:just_audio/just_audio.dart' as _i4;
 import 'package:labhouse_test_task_radio_app/src/config/networking/networking_di_module.dart'
-    as _i15;
+    as _i16;
 import 'package:labhouse_test_task_radio_app/src/core/core_di_module.dart'
-    as _i14;
+    as _i15;
 import 'package:labhouse_test_task_radio_app/src/core/database/database.dart'
     as _i3;
 import 'package:labhouse_test_task_radio_app/src/core/database/database_di_module.dart'
-    as _i13;
+    as _i14;
 import 'package:labhouse_test_task_radio_app/src/modules/radio/blocs/favorite_stations_bloc/favorite_stations_bloc.dart'
-    as _i12;
+    as _i13;
 import 'package:labhouse_test_task_radio_app/src/modules/radio/blocs/radio_stations_bloc/radio_stations_bloc.dart'
-    as _i11;
+    as _i12;
+import 'package:labhouse_test_task_radio_app/src/modules/radio/blocs/rasio_player_cubit/radio_player_cubit.dart'
+    as _i8;
 import 'package:labhouse_test_task_radio_app/src/modules/radio/blocs/selected_station_cubit/selected_station_cubit.dart'
-    as _i9;
+    as _i10;
 import 'package:labhouse_test_task_radio_app/src/modules/radio/data_sources/local/radio_local_data_source.dart'
     as _i6;
 import 'package:labhouse_test_task_radio_app/src/modules/radio/data_sources/remote/radio_service.dart'
-    as _i8;
+    as _i9;
 import 'package:labhouse_test_task_radio_app/src/modules/radio/repositories/radio_repository.dart'
-    as _i10;
-import 'package:labhouse_test_task_radio_app/src/modules/radio/utils/radio_player.dart'
+    as _i11;
+import 'package:labhouse_test_task_radio_app/src/modules/radio/utils/radio_player/radio_player.dart'
     as _i7;
 
 extension GetItInjectableX on _i1.GetIt {
@@ -55,24 +57,28 @@ extension GetItInjectableX on _i1.GetIt {
     gh.lazySingleton<_i6.RadioLocalDataSource>(
         () => _i6.RadioLocalDataSource(gh<_i3.AppDatabase>()));
     gh.lazySingleton<_i7.RadioPlayer>(
-        () => _i7.RadioPlayer(gh<_i4.AudioPlayer>()));
-    gh.lazySingleton<_i8.RadioService>(() => _i8.RadioService(gh<_i5.Dio>()));
-    gh.lazySingleton<_i9.SelectedStationCubit>(
-        () => _i9.SelectedStationCubit());
-    gh.lazySingleton<_i10.RadioRepository>(() => _i10.RadioRepository(
-          gh<_i8.RadioService>(),
+      () => _i7.RadioPlayer(gh<_i4.AudioPlayer>()),
+      dispose: (i) => i.dispose(),
+    );
+    gh.lazySingleton<_i8.RadioPlayerCubit>(
+        () => _i8.RadioPlayerCubit(gh<_i7.RadioPlayer>()));
+    gh.lazySingleton<_i9.RadioService>(() => _i9.RadioService(gh<_i5.Dio>()));
+    gh.lazySingleton<_i10.SelectedStationCubit>(
+        () => _i10.SelectedStationCubit());
+    gh.lazySingleton<_i11.RadioRepository>(() => _i11.RadioRepository(
+          gh<_i9.RadioService>(),
           gh<_i6.RadioLocalDataSource>(),
         ));
-    gh.factory<_i11.RadioStationsBloc>(
-        () => _i11.RadioStationsBloc(gh<_i10.RadioRepository>()));
-    gh.factory<_i12.FavoriteStationsBloc>(
-        () => _i12.FavoriteStationsBloc(gh<_i10.RadioRepository>()));
+    gh.factory<_i12.RadioStationsBloc>(
+        () => _i12.RadioStationsBloc(gh<_i11.RadioRepository>()));
+    gh.factory<_i13.FavoriteStationsBloc>(
+        () => _i13.FavoriteStationsBloc(gh<_i11.RadioRepository>()));
     return this;
   }
 }
 
-class _$DatabaseDiModule extends _i13.DatabaseDiModule {}
+class _$DatabaseDiModule extends _i14.DatabaseDiModule {}
 
-class _$CoreModule extends _i14.CoreModule {}
+class _$CoreModule extends _i15.CoreModule {}
 
-class _$NetworkingModule extends _i15.NetworkingModule {}
+class _$NetworkingModule extends _i16.NetworkingModule {}

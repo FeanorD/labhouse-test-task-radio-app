@@ -20,12 +20,14 @@ class _RadioService implements RadioService {
 
   @override
   Future<List<RadioStation>> getRadioStations({
+    String countryCode = 'UA',
     int limit = 20,
     int offset = 0,
     bool hideBroken = true,
   }) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
+      r'countrycode': countryCode,
       r'limit': limit,
       r'offset': offset,
       r'hidebroken': hideBroken,
@@ -40,7 +42,7 @@ class _RadioService implements RadioService {
     )
             .compose(
               _dio.options,
-              '/stations',
+              '/stations/search',
               queryParameters: queryParameters,
               data: _data,
             )

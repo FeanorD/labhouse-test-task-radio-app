@@ -9,11 +9,19 @@ part 'radio_service.g.dart';
 @lazySingleton
 @RestApi()
 abstract interface class RadioService {
-  @GET('/stations')
+  // @GET('/stations/bycountry/UA')
+  // Future<List<RadioStation>> getRadioStations({
+  //   @Query('limit') int limit = 20,
+  //   @Query('offset') int offset = 0,
+  //   @Query('hidebroken') bool hideBroken = true, // Whether to include broken stations in the response list or not
+  // });
+
+  @GET('/stations/search')
   Future<List<RadioStation>> getRadioStations({
+    @Query('countrycode') String countryCode = 'UA',
     @Query('limit') int limit = 20,
     @Query('offset') int offset = 0,
-    @Query('hidebroken') bool hideBroken = true, // Whether to include broken stations in the response list or not
+    @Query('hidebroken') bool hideBroken = true, //// Whether to include broken stations in the response list or not
   });
 
   @factoryMethod
