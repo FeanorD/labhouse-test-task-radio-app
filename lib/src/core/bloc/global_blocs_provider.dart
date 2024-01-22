@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../config/di/injection.dart';
 import '../../modules/radio/blocs/favorite_stations_bloc/favorite_stations_bloc.dart';
 import '../../modules/radio/blocs/radio_stations_bloc/radio_stations_bloc.dart';
+import '../../modules/radio/blocs/rasio_player_cubit/radio_player_cubit.dart';
 import '../../modules/radio/blocs/selected_station_cubit/selected_station_cubit.dart';
 
 class GlobalBlocsProvider extends StatelessWidget {
@@ -27,6 +28,9 @@ class GlobalBlocsProvider extends StatelessWidget {
         BlocProvider<SelectedStationCubit>(
           create: (_) => getIt(),
         ),
+        BlocProvider<RadioPlayerCubit>(
+          create: (_) => getIt(),
+        )
       ],
       child: child,
     );
