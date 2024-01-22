@@ -2,15 +2,37 @@
 
 A simple radio stations playing app.
 
-## Getting Started
+## Table of Contents
+- [Features](#features)
+- [How to run](#how-to-run)
 
-This project is a starting point for a Flutter application.
 
-A few resources to get you started if this is your first Flutter project:
+## Features
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Main Requirements
+- [x] List of all radio stations from Spain using [RadioBrowser API](https://de1.api.radio-browser.info/)
+- [x] Save radio stations to favorites on local database
+- [x] Select and Play/pause radio station
+- [x] Volume control
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Additional
+- [ ] Background playback (It's buggy at the moment)
+- [ ] Seek to previous/next radio station (In progress)
+
+## How to run
+
+1. Go through [Flutter installation](https://docs.flutter.dev/get-started/install) process if you haven't already :)
+2. Clone this repository to your local machine
+    ```shell
+    git clone https://github.com/FeanorD/labhouse_test_task_radio_app.git
+    ```
+   
+3. Go to the project's root directory
+    ```shell
+    cd labhouse_test_task_radio_app
+    ```
+
+4. Check this project Flutter SDK version in [fvm_config.json](.fvm/fvm_config.json) file. If you don't have this version installed, please install it either globally or with [fvm](https://fvm.app/).
+5. To install dependencies, run `flutter pub get` or `fvm flutter pub get` depending on what you choose on the previous step.
+6. Connect your device or emulator and run the app with `flutter run` or `fvm flutter run` command.
+
