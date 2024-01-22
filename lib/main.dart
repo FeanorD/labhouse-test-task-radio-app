@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'src/config/di/injection.dart';
 import 'src/core/bloc/global_blocs_provider.dart';
@@ -13,6 +14,10 @@ Future<void> main() async {
     androidNotificationOngoing: false,
     androidStopForegroundOnPause: false,
   );
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 
   runApp(const RadioApp());
 }
