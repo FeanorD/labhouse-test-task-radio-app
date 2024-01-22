@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../common_widgets/volume_slider.dart';
-import '../../../config/di/injection.dart';
 import '../blocs/favorite_stations_bloc/favorite_stations_bloc.dart';
+import '../blocs/rasio_player_cubit/radio_player_cubit.dart';
 import '../models/radio_station_model.dart';
 import '../utils/favorite_station_handler_mixin.dart';
-import '../utils/radio_player/radio_player.dart';
+import '../widgets/play_button.dart';
 import '../widgets/radio_station_logo.dart';
 
 class RadioStationPlayerScreen extends StatelessWidget
@@ -22,6 +22,8 @@ class RadioStationPlayerScreen extends StatelessWidget
   Widget build(BuildContext context) {
     const skipIconSize = 32.0;
     const playIconSize = 60.0;
+
+    final radioPlayerCubit = context.read<RadioPlayerCubit>();
 
     return Scaffold(
       appBar: AppBar(
@@ -67,14 +69,19 @@ class RadioStationPlayerScreen extends StatelessWidget
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 34.0, vertical: 20.0),
-            child: Text(
-              radioStation.name,
-              textAlign: TextAlign.center,
-              maxLines: 3,
-              style: const TextStyle(
-                fontSize: 24.0,
-                fontWeight: FontWeight.w700,
-                overflow: TextOverflow.ellipsis,
+            child: Hero(
+              tag: radioStation.id,
+              child: Material(
+                child: Text(
+                  radioStation.name,
+                  textAlign: TextAlign.center,
+                  maxLines: 3,
+                  style: const TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.w700,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
               ),
             ),
           ),
@@ -93,22 +100,24 @@ class RadioStationPlayerScreen extends StatelessWidget
                 ),
                 onPressed: () {},
               ),
-              StreamBuilder<bool>(
-                  stream: getIt<RadioPlayer>().playingStream,
-                  builder: (context, snapshot) {
-                    final isPlaying = snapshot.data ?? false;
-                    return IconButton(
-                        icon: Icon(
-                          isPlaying
-                              ? Icons.pause_rounded
-                              : Icons.play_arrow_rounded,
-                          size: playIconSize,
-                        ),
-                        onPressed: isPlaying
-                            ? getIt<RadioPlayer>().pause
-                            : getIt<RadioPlayer>().resume,
-                    );
-                  }
+              Builder(
+                builder: (context) {
+                  final isPlaying = context.select<RadioPlayerCubit, bool>(
+                    (cubit) => cubit.state.isPlaying,
+                  );
+                  final isAudioLoading = context.select<RadioPlayerCubit, bool>(
+                    (cubit) => cubit.state.isAudioLoading,
+                  );
+
+                  return PlayButton(
+                    iconSize: playIconSize,
+                    isPlaying: isPlaying,
+                    isAudioLoading: isAudioLoading,
+                    onTap: isPlaying
+                        ? radioPlayerCubit.pause
+                        : radioPlayerCubit.resume,
+                  );
+                },
               ),
               IconButton(
                 icon: const Icon(
@@ -121,14 +130,14 @@ class RadioStationPlayerScreen extends StatelessWidget
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 34),
-            child: StreamBuilder<double>(
-              stream: getIt<RadioPlayer>().volumeStream,
-              builder: (context, snapshot) {
-                final volume = snapshot.data ?? 1.0;
+            child: Builder(
+              builder: (context) {
+                final volume = context.select<RadioPlayerCubit, double>(
+                  (cubit) => cubit.state.volume,
+                );
                 return VolumeSlider(
                   value: volume,
-                  onValueChanged: (value) =>
-                      getIt<RadioPlayer>().setVolume(value),
+                  onValueChanged: (value) => radioPlayerCubit.setVolume(value),
                 );
               }
             ),
