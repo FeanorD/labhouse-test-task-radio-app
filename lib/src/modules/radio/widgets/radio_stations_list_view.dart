@@ -6,12 +6,14 @@ import 'radio_station_tile.dart';
 class RadioStationsListView extends StatefulWidget {
   const RadioStationsListView({
     required this.radioStations,
+    this.selectedRadioStation,
     this.onRadioStationTap,
     this.onAddStationToFavoritesTap,
     this.onLoadMore,
     super.key,
   });
 
+  final RadioStation? selectedRadioStation;
   final List<RadioStation> radioStations;
   final ValueChanged<RadioStation>? onRadioStationTap;
   final ValueChanged<RadioStation>? onAddStationToFavoritesTap;
@@ -59,17 +61,20 @@ class _RadioStationsListViewState extends State<RadioStationsListView> {
       controller: _scrollController,
       thumbVisibility: true,
       child: ListView.builder(
+        padding: const EdgeInsets.only(bottom: 100.0),
         controller: _scrollController,
         shrinkWrap: true,
         itemCount: widget.radioStations.length,
         itemBuilder: (context, index) {
           final radioStation = widget.radioStations[index];
+          final isSelected = widget.selectedRadioStation?.id == radioStation.id;
+
           return RadioStationTile(
             key: ValueKey(radioStation.id),
             radioStation: radioStation,
             onTap: () => widget.onRadioStationTap?.call(radioStation),
             onFavoriteTap: () => widget.onAddStationToFavoritesTap?.call(radioStation),
-            isSelected: index == 1,
+            isSelected: isSelected,
           );
         },
         // separatorBuilder: (context, index) => const Divider(),
