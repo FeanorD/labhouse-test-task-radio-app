@@ -30,13 +30,16 @@ class PlayButton extends StatelessWidget {
 
         if (isAudioLoading)
           Positioned.fill(
-            child: IgnorePointer(
-              ignoring: true,
+            // Restrict tap events on widgets visually under this widget
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {},
               child: Container(
                 padding: EdgeInsets.all(iconSize * 0.4),
                 decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.background.withOpacity(0.7),
                   borderRadius: BorderRadius.circular(8.0),
+
                 ),
                 child: const Center(
                   child: CircularProgressIndicator(),
