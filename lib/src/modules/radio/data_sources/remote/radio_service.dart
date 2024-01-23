@@ -18,10 +18,12 @@ abstract interface class RadioService {
 
   @GET('/stations/search')
   Future<List<RadioStation>> getRadioStations({
-    @Query('countrycode') String countryCode = 'UA',
+    @Query('countrycode') String countryCode = 'ES', // Get stations only by Spain, because of broken stations on global search
+    @Query('order') String order = 'lastcheckok', // Last checked working stations first
+
     @Query('limit') int limit = 20,
     @Query('offset') int offset = 0,
-    @Query('hidebroken') bool hideBroken = true, //// Whether to include broken stations in the response list or not
+    @Query('hidebroken') bool hideBroken = true, // Whether to include broken stations in the response list or not
   });
 
   @factoryMethod
