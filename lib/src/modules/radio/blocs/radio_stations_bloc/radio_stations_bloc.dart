@@ -20,7 +20,7 @@ class RadioStationsBloc extends Bloc<RadioStationsEvent, RadioStationsState> {
       try {
         final stations = await _radioRepository.getRadioStations();
         emit(RadioStationsState.loaded(
-          stations: stations,
+          allStations: stations,
           hasReachedEnd: stations.length < _paginationStep,
         ));
       } catch (e) {
@@ -31,16 +31,17 @@ class RadioStationsBloc extends Bloc<RadioStationsEvent, RadioStationsState> {
     on<_LoadMoreStationsEvent>((event, emit) async {
       final currentState = state;
 
-      if (currentState is _RadioStationsLoadedState && !currentState.hasReachedEnd) {
+      if (currentState is RadioStationsLoadedState && !currentState.hasReachedEnd) {
         try {
-          final stations = await _radioRepository.getRadioStations(
-            offset: currentState.stations.length,
+          final newStationsPortion = await _radioRepository.getRadioStations(
+            offset: currentState.allStations.length,
             limit: _paginationStep,
           );
 
           emit(RadioStationsState.loaded(
-            stations: currentState.stations + stations,
-            hasReachedEnd: stations.length < _paginationStep,
+            allStations: currentState.allStations + newStationsPortion,
+            hasReachedEnd: newStationsPortion.length < _paginationStep,
+            lastAddedStationsPortion: newStationsPortion,
           ));
         } catch (e) {
           Logger().e('Failed to load more radio stations', error: e);

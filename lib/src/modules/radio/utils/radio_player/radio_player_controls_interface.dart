@@ -7,6 +7,9 @@ abstract interface class RadioPlayerControls {
   Future<void> stop();
   Future<void> pause();
 
+  Future<void> seekToNext();
+  Future<void> seekToPrevious();
+
   /// Resumes the audio from the current audio source.
   Future<void> resume();
 

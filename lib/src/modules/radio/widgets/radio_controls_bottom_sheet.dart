@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../blocs/favorite_stations_bloc/favorite_stations_bloc.dart';
-import '../blocs/rasio_player_cubit/radio_player_cubit.dart';
+import '../blocs/radio_player_cubit/radio_player_cubit.dart';
 import '../models/radio_station_model.dart';
 import '../screens/radio_station_player_screen.dart';
 import '../utils/favorite_station_handler_mixin.dart';
@@ -22,9 +22,7 @@ class RadioControlsBottomSheet extends StatelessWidget with FavoriteStationsHand
       CupertinoPageRoute(
         fullscreenDialog: true,
         builder: (context) {
-          return RadioStationPlayerScreen(
-            radioStation: radioStation,
-          );
+          return const RadioStationPlayerScreen();
         },
       ),
     );
