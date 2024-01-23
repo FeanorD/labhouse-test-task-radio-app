@@ -17,8 +17,9 @@ A simple radio stations playing app.
 - [x] Volume control
 
 ### Additional
-- [ ] Background playback (It's buggy at the moment)
-- [ ] Seek to previous/next radio station (In progress)
+- [x] Background playback (It's available, but very buggy at the moment)
+- [x] Seek to previous/next radio station (Available in branch playlist_controls)
+- [ ] Robust player error handling (Not implemented)
 
 ## How to run
 
