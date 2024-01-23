@@ -22,10 +22,10 @@ import 'package:labhouse_test_task_radio_app/src/core/database/database_di_modul
     as _i14;
 import 'package:labhouse_test_task_radio_app/src/modules/radio/blocs/favorite_stations_bloc/favorite_stations_bloc.dart'
     as _i13;
+import 'package:labhouse_test_task_radio_app/src/modules/radio/blocs/radio_player_cubit/radio_player_cubit.dart'
+    as _i8;
 import 'package:labhouse_test_task_radio_app/src/modules/radio/blocs/radio_stations_bloc/radio_stations_bloc.dart'
     as _i12;
-import 'package:labhouse_test_task_radio_app/src/modules/radio/blocs/rasio_player_cubit/radio_player_cubit.dart'
-    as _i8;
 import 'package:labhouse_test_task_radio_app/src/modules/radio/blocs/selected_station_cubit/selected_station_cubit.dart'
     as _i10;
 import 'package:labhouse_test_task_radio_app/src/modules/radio/data_sources/local/radio_local_data_source.dart'
