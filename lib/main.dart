@@ -39,13 +39,14 @@ class RadioApp extends StatelessWidget {
           colorScheme: colorScheme,
           useMaterial3: true,
           navigationBarTheme: const NavigationBarThemeData(
-            // backgroundColor: colorScheme.background,
             elevation: 2,
           ),
           bottomSheetTheme: const BottomSheetThemeData(
-            // backgroundColor: colorScheme.background,
             elevation: 2,
             shape: RoundedRectangleBorder(),
+          ),
+          iconTheme: const IconThemeData(
+            color: Color.fromRGBO(244, 186, 97, 1),
           ),
           // colorSchemeSeed: Color(0xFF061A29),
         ),

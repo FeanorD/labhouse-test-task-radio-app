@@ -12,23 +12,27 @@ class VolumeSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const spacer = SizedBox(width: 6.0);
+    final parentTheme = Theme.of(context);
 
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      // mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Icon(Icons.volume_down_rounded),
-        // spacer,
-        Expanded(
-          child: Slider(
-            value: value,
-            onChanged: onValueChanged,
-          ),
+    return Theme(
+      data: parentTheme.copyWith(
+        iconTheme: parentTheme.iconTheme.copyWith(
+          color: parentTheme.colorScheme.onSurface,
         ),
-        // spacer,
-        const Icon(Icons.volume_up_rounded),
-      ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.volume_down_rounded),
+          Expanded(
+            child: Slider(
+              value: value,
+              onChanged: onValueChanged,
+            ),
+          ),
+          const Icon(Icons.volume_up_rounded),
+        ],
+      ),
     );
   }
 }
