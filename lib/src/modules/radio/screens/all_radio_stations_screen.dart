@@ -5,7 +5,8 @@ import '../../../common_widgets/error_view.dart';
 import '../../../common_widgets/loader.dart';
 import '../blocs/favorite_stations_bloc/favorite_stations_bloc.dart';
 import '../blocs/radio_stations_bloc/radio_stations_bloc.dart';
-import '../blocs/selected_station_cubit/selected_station_cubit.dart';
+import '../blocs/radio_player_cubit/radio_player_cubit.dart';
+import '../models/enums.dart';
 import '../models/radio_station_model.dart';
 import '../utils/favorite_station_handler_mixin.dart';
 import '../widgets/radio_stations_list_view.dart';
@@ -23,8 +24,8 @@ class AllRadioStationsScreen extends StatelessWidget
         orElse: () => [],
       )
     );
-    final selectedStation = context.select<SelectedStationCubit, RadioStation?>(
-      (value) => value.state.station,
+    final selectedStation = context.select<RadioPlayerCubit, RadioStation?>(
+        (cubit) => cubit.state.currentStation,
     );
 
     return radioStationsState.when(
@@ -36,7 +37,7 @@ class AllRadioStationsScreen extends StatelessWidget
               .add(const RadioStationsEvent.load()),
         ),
       ),
-      loaded: (radioStations, _) {
+      loaded: (radioStations, _, __) {
         final composedRadioStations = radioStations.map(
           (station) => station.copyWith(
             isFavorite: favoriteStationsIds.contains(station.id),
@@ -46,8 +47,12 @@ class AllRadioStationsScreen extends StatelessWidget
         return RadioStationsListView(
           selectedRadioStation: selectedStation,
           radioStations: composedRadioStations,
-          onRadioStationTap: (station) =>
-              context.read<SelectedStationCubit>().selectStation(station),
+          onRadioStationTap: (station, index) => context.read<RadioPlayerCubit>()
+              .playStation(
+                radioStationIndex: index,
+                playlistType: PlaylistType.all,
+                playlist: radioStations,
+              ),
           onAddStationToFavoritesTap: (station) =>
               toggleFavoriteStation(context, station),
           onLoadMore: () => context.read<RadioStationsBloc>()

@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../config/di/injection.dart';
-import '../../radio/blocs/selected_station_cubit/selected_station_cubit.dart';
+import '../../radio/blocs/radio_blocs_listener.dart';
+import '../../radio/blocs/radio_player_cubit/radio_player_cubit.dart';
 import '../../radio/models/radio_station_model.dart';
 import '../../radio/screens/all_radio_stations_screen.dart';
 import '../../radio/screens/favorite_stations_screen.dart';
-import '../../radio/utils/radio_player/radio_player.dart';
 import '../../radio/widgets/radio_controls_bottom_sheet.dart';
 import '../models/enums.dart';
 
@@ -45,12 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<SelectedStationCubit, SelectedStationState>(
-      listener: (context, state) {
-        if (state.station != null) {
-          getIt<RadioPlayer>().playNewStation(state.station!);
-        }
-      },
+    return RadioBlocsListener(
       child: Scaffold(
         appBar: AppBar(
           title: Text(
@@ -73,30 +67,30 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
 
         bottomSheet: Builder(
-          builder: (context) {
-            final selectedStation = context.select<SelectedStationCubit, RadioStation?>(
-              (bloc) => bloc.state.station,
-            );
+            builder: (context) {
+              final selectedStation = context.select<RadioPlayerCubit, RadioStation?>(
+                  (cubit) => cubit.state.currentStation,
+              );
 
-            return AnimatedSwitcher(
-              duration: const Duration(milliseconds: 500),
-              switchInCurve: Curves.fastOutSlowIn,
-              switchOutCurve: Curves.fastOutSlowIn,
-              child: selectedStation == null
-                  ? const SizedBox()
-                  : RadioControlsBottomSheet(
-                      radioStation: selectedStation,
-                    ),
-              transitionBuilder: (child, animation) {
-                return SizeTransition(
-                  sizeFactor: animation,
-                  axis: Axis.vertical,
-                  axisAlignment: -1.0,
-                  child: child,
-                );
-              },
-            );
-          }
+              return AnimatedSwitcher(
+                duration: const Duration(milliseconds: 500),
+                switchInCurve: Curves.fastOutSlowIn,
+                switchOutCurve: Curves.fastOutSlowIn,
+                child: selectedStation == null
+                    ? const SizedBox()
+                    : RadioControlsBottomSheet(
+                  radioStation: selectedStation,
+                ),
+                transitionBuilder: (child, animation) {
+                  return SizeTransition(
+                    sizeFactor: animation,
+                    axis: Axis.vertical,
+                    axisAlignment: -1.0,
+                    child: child,
+                  );
+                },
+              );
+            }
         ),
       ),
     );

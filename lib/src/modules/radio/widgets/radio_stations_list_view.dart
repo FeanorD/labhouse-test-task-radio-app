@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../models/radio_station_model.dart';
 import 'radio_station_tile.dart';
 
+typedef OnRadioStationTapCallback = void Function(RadioStation radioStation, int index);
+
 class RadioStationsListView extends StatefulWidget {
   const RadioStationsListView({
     required this.radioStations,
@@ -15,7 +17,8 @@ class RadioStationsListView extends StatefulWidget {
 
   final RadioStation? selectedRadioStation;
   final List<RadioStation> radioStations;
-  final ValueChanged<RadioStation>? onRadioStationTap;
+  // final ValueChanged<RadioStation>? onRadioStationTap;
+  final OnRadioStationTapCallback? onRadioStationTap;
   final ValueChanged<RadioStation>? onAddStationToFavoritesTap;
   final VoidCallback? onLoadMore;
 
@@ -72,7 +75,7 @@ class _RadioStationsListViewState extends State<RadioStationsListView> {
           return RadioStationTile(
             key: ValueKey(radioStation.id),
             radioStation: radioStation,
-            onTap: () => widget.onRadioStationTap?.call(radioStation),
+            onTap: () => widget.onRadioStationTap?.call(radioStation, index),
             onFavoriteTap: () => widget.onAddStationToFavoritesTap?.call(radioStation),
             isSelected: isSelected,
           );

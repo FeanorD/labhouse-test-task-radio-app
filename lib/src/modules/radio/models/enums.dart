@@ -1,0 +1,4 @@
+enum PlaylistType {
+  all,
+  favorite,
+}

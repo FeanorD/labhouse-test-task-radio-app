@@ -11,6 +11,20 @@ abstract class RadioPlayer implements RadioPlayerControls {
   Stream<double> get volumeStream;
   Stream<bool> get audioLoadingStream;
 
+  Stream<List<IndexedAudioSource>?> get sequenceStream;
+  Stream<int?> get currentIndexStream;
+
+  Future<void> setPlaylist(List<RadioStation> stations, {
+    int initialIndex = 0,
+  });
+
+  Future<void> addStationsToPlaylist(List<RadioStation> station);
+
+  Future<void> seekToIndex(int index);
+
+  // @PostConstruct(preResolve: true)
+  Future<void> init();
+
   @disposeMethod
   void dispose();
 
@@ -19,9 +33,23 @@ abstract class RadioPlayer implements RadioPlayerControls {
 }
 
 class _RadioPlayer implements RadioPlayer {
-  const _RadioPlayer(this._audioPlayer);
+  _RadioPlayer(this._audioPlayer);
 
   final AudioPlayer _audioPlayer;
+
+  late ConcatenatingAudioSource _playlist;
+
+  @override
+  Future<void> init() async {
+    _playlist = ConcatenatingAudioSource(children: []);
+    await _audioPlayer.setAudioSource(_playlist);
+
+    // final sub = _audioPlayer.processingStateStream.listen((state) {
+    //   print('processingStateStream: $state');
+    // });
+    //
+    // Future.delayed(Duration(seconds: 30)).then((value) => sub.cancel());
+  }
 
   @override
   Future<void> pause() {
@@ -78,6 +106,69 @@ class _RadioPlayer implements RadioPlayer {
   void dispose() {
     _audioPlayer.dispose();
   }
+
+  @override
+  Future<void> setPlaylist(List<RadioStation> stations, {
+    int initialIndex = 0,
+  }) async {
+    _playlist = ConcatenatingAudioSource(
+      children: stations.map((station) {
+        return AudioSource.uri(
+          Uri.parse(station.audioStreamUrl),
+          tag: MediaItem(
+            id: station.id,
+            title: station.name,
+            artUri: station.hasIcon ? Uri.parse(station.logoUrl) : null,
+          ),
+        );
+      }).toList(),
+    );
+
+    await _audioPlayer.setAudioSource(
+      _playlist,
+      initialIndex: initialIndex,
+    );
+
+    // _audioPlayer.
+  }
+
+  @override
+  Future<void> addStationsToPlaylist(List<RadioStation> station) async {
+    if (_playlist.children.isEmpty) {
+      await setPlaylist(station);
+      return;
+    }
+
+    await _playlist.addAll(
+      station.map((station) {
+        return AudioSource.uri(
+          Uri.parse(station.audioStreamUrl),
+          tag: MediaItem(
+            id: station.id,
+            title: station.name,
+            artUri: station.hasIcon ? Uri.parse(station.logoUrl) : null,
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  @override
+  Stream<List<IndexedAudioSource>?> get sequenceStream => _audioPlayer.sequenceStream;
+
+  @override
+  Stream<int?> get currentIndexStream => _audioPlayer.currentIndexStream;
+
+  @override
+  Future<void> seekToIndex(int index) {
+    return _audioPlayer.seek(Duration.zero, index: index);
+  }
+
+  @override
+  Future<void> seekToNext() => _audioPlayer.seekToNext();
+
+  @override
+  Future<void> seekToPrevious() => _audioPlayer.seekToPrevious();
 
 }
 

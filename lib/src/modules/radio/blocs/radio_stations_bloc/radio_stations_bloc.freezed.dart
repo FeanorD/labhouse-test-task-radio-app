@@ -284,7 +284,8 @@ abstract class _LoadMoreStationsEvent implements RadioStationsEvent {
 mixin _$RadioStationsState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<RadioStation> stations, bool hasReachedEnd)
+    required TResult Function(List<RadioStation> allStations,
+            List<RadioStation>? lastAddedStationsPortion, bool hasReachedEnd)
         loaded,
     required TResult Function() loading,
     required TResult Function(String message) error,
@@ -292,14 +293,18 @@ mixin _$RadioStationsState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(List<RadioStation> stations, bool hasReachedEnd)? loaded,
+    TResult? Function(List<RadioStation> allStations,
+            List<RadioStation>? lastAddedStationsPortion, bool hasReachedEnd)?
+        loaded,
     TResult? Function()? loading,
     TResult? Function(String message)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<RadioStation> stations, bool hasReachedEnd)? loaded,
+    TResult Function(List<RadioStation> allStations,
+            List<RadioStation>? lastAddedStationsPortion, bool hasReachedEnd)?
+        loaded,
     TResult Function()? loading,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -307,23 +312,23 @@ mixin _$RadioStationsState {
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_RadioStationsLoadedState value) loaded,
-    required TResult Function(_RadioStationsLoadingState value) loading,
-    required TResult Function(_RadioStationsErrorState value) error,
+    required TResult Function(RadioStationsLoadedState value) loaded,
+    required TResult Function(RadioStationsLoadingState value) loading,
+    required TResult Function(RadioStationsErrorState value) error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_RadioStationsLoadedState value)? loaded,
-    TResult? Function(_RadioStationsLoadingState value)? loading,
-    TResult? Function(_RadioStationsErrorState value)? error,
+    TResult? Function(RadioStationsLoadedState value)? loaded,
+    TResult? Function(RadioStationsLoadingState value)? loading,
+    TResult? Function(RadioStationsErrorState value)? error,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_RadioStationsLoadedState value)? loaded,
-    TResult Function(_RadioStationsLoadingState value)? loading,
-    TResult Function(_RadioStationsErrorState value)? error,
+    TResult Function(RadioStationsLoadedState value)? loaded,
+    TResult Function(RadioStationsLoadingState value)? loading,
+    TResult Function(RadioStationsErrorState value)? error,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -354,7 +359,10 @@ abstract class _$$RadioStationsLoadedStateImplCopyWith<$Res> {
           $Res Function(_$RadioStationsLoadedStateImpl) then) =
       __$$RadioStationsLoadedStateImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({List<RadioStation> stations, bool hasReachedEnd});
+  $Res call(
+      {List<RadioStation> allStations,
+      List<RadioStation>? lastAddedStationsPortion,
+      bool hasReachedEnd});
 }
 
 /// @nodoc
@@ -370,14 +378,19 @@ class __$$RadioStationsLoadedStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? stations = null,
+    Object? allStations = null,
+    Object? lastAddedStationsPortion = freezed,
     Object? hasReachedEnd = null,
   }) {
     return _then(_$RadioStationsLoadedStateImpl(
-      stations: null == stations
-          ? _value._stations
-          : stations // ignore: cast_nullable_to_non_nullable
+      allStations: null == allStations
+          ? _value._allStations
+          : allStations // ignore: cast_nullable_to_non_nullable
               as List<RadioStation>,
+      lastAddedStationsPortion: freezed == lastAddedStationsPortion
+          ? _value._lastAddedStationsPortion
+          : lastAddedStationsPortion // ignore: cast_nullable_to_non_nullable
+              as List<RadioStation>?,
       hasReachedEnd: null == hasReachedEnd
           ? _value.hasReachedEnd
           : hasReachedEnd // ignore: cast_nullable_to_non_nullable
@@ -388,17 +401,31 @@ class __$$RadioStationsLoadedStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$RadioStationsLoadedStateImpl implements _RadioStationsLoadedState {
+class _$RadioStationsLoadedStateImpl implements RadioStationsLoadedState {
   const _$RadioStationsLoadedStateImpl(
-      {required final List<RadioStation> stations, this.hasReachedEnd = false})
-      : _stations = stations;
+      {required final List<RadioStation> allStations,
+      final List<RadioStation>? lastAddedStationsPortion,
+      this.hasReachedEnd = false})
+      : _allStations = allStations,
+        _lastAddedStationsPortion = lastAddedStationsPortion;
 
-  final List<RadioStation> _stations;
+  final List<RadioStation> _allStations;
   @override
-  List<RadioStation> get stations {
-    if (_stations is EqualUnmodifiableListView) return _stations;
+  List<RadioStation> get allStations {
+    if (_allStations is EqualUnmodifiableListView) return _allStations;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_stations);
+    return EqualUnmodifiableListView(_allStations);
+  }
+
+  final List<RadioStation>? _lastAddedStationsPortion;
+  @override
+  List<RadioStation>? get lastAddedStationsPortion {
+    final value = _lastAddedStationsPortion;
+    if (value == null) return null;
+    if (_lastAddedStationsPortion is EqualUnmodifiableListView)
+      return _lastAddedStationsPortion;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(value);
   }
 
   @override
@@ -407,7 +434,7 @@ class _$RadioStationsLoadedStateImpl implements _RadioStationsLoadedState {
 
   @override
   String toString() {
-    return 'RadioStationsState.loaded(stations: $stations, hasReachedEnd: $hasReachedEnd)';
+    return 'RadioStationsState.loaded(allStations: $allStations, lastAddedStationsPortion: $lastAddedStationsPortion, hasReachedEnd: $hasReachedEnd)';
   }
 
   @override
@@ -415,14 +442,20 @@ class _$RadioStationsLoadedStateImpl implements _RadioStationsLoadedState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$RadioStationsLoadedStateImpl &&
-            const DeepCollectionEquality().equals(other._stations, _stations) &&
+            const DeepCollectionEquality()
+                .equals(other._allStations, _allStations) &&
+            const DeepCollectionEquality().equals(
+                other._lastAddedStationsPortion, _lastAddedStationsPortion) &&
             (identical(other.hasReachedEnd, hasReachedEnd) ||
                 other.hasReachedEnd == hasReachedEnd));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType,
-      const DeepCollectionEquality().hash(_stations), hasReachedEnd);
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(_allStations),
+      const DeepCollectionEquality().hash(_lastAddedStationsPortion),
+      hasReachedEnd);
 
   @JsonKey(ignore: true)
   @override
@@ -434,34 +467,39 @@ class _$RadioStationsLoadedStateImpl implements _RadioStationsLoadedState {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<RadioStation> stations, bool hasReachedEnd)
+    required TResult Function(List<RadioStation> allStations,
+            List<RadioStation>? lastAddedStationsPortion, bool hasReachedEnd)
         loaded,
     required TResult Function() loading,
     required TResult Function(String message) error,
   }) {
-    return loaded(stations, hasReachedEnd);
+    return loaded(allStations, lastAddedStationsPortion, hasReachedEnd);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(List<RadioStation> stations, bool hasReachedEnd)? loaded,
+    TResult? Function(List<RadioStation> allStations,
+            List<RadioStation>? lastAddedStationsPortion, bool hasReachedEnd)?
+        loaded,
     TResult? Function()? loading,
     TResult? Function(String message)? error,
   }) {
-    return loaded?.call(stations, hasReachedEnd);
+    return loaded?.call(allStations, lastAddedStationsPortion, hasReachedEnd);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<RadioStation> stations, bool hasReachedEnd)? loaded,
+    TResult Function(List<RadioStation> allStations,
+            List<RadioStation>? lastAddedStationsPortion, bool hasReachedEnd)?
+        loaded,
     TResult Function()? loading,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(stations, hasReachedEnd);
+      return loaded(allStations, lastAddedStationsPortion, hasReachedEnd);
     }
     return orElse();
   }
@@ -469,9 +507,9 @@ class _$RadioStationsLoadedStateImpl implements _RadioStationsLoadedState {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_RadioStationsLoadedState value) loaded,
-    required TResult Function(_RadioStationsLoadingState value) loading,
-    required TResult Function(_RadioStationsErrorState value) error,
+    required TResult Function(RadioStationsLoadedState value) loaded,
+    required TResult Function(RadioStationsLoadingState value) loading,
+    required TResult Function(RadioStationsErrorState value) error,
   }) {
     return loaded(this);
   }
@@ -479,9 +517,9 @@ class _$RadioStationsLoadedStateImpl implements _RadioStationsLoadedState {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_RadioStationsLoadedState value)? loaded,
-    TResult? Function(_RadioStationsLoadingState value)? loading,
-    TResult? Function(_RadioStationsErrorState value)? error,
+    TResult? Function(RadioStationsLoadedState value)? loaded,
+    TResult? Function(RadioStationsLoadingState value)? loading,
+    TResult? Function(RadioStationsErrorState value)? error,
   }) {
     return loaded?.call(this);
   }
@@ -489,9 +527,9 @@ class _$RadioStationsLoadedStateImpl implements _RadioStationsLoadedState {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_RadioStationsLoadedState value)? loaded,
-    TResult Function(_RadioStationsLoadingState value)? loading,
-    TResult Function(_RadioStationsErrorState value)? error,
+    TResult Function(RadioStationsLoadedState value)? loaded,
+    TResult Function(RadioStationsLoadingState value)? loading,
+    TResult Function(RadioStationsErrorState value)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
@@ -501,12 +539,14 @@ class _$RadioStationsLoadedStateImpl implements _RadioStationsLoadedState {
   }
 }
 
-abstract class _RadioStationsLoadedState implements RadioStationsState {
-  const factory _RadioStationsLoadedState(
-      {required final List<RadioStation> stations,
+abstract class RadioStationsLoadedState implements RadioStationsState {
+  const factory RadioStationsLoadedState(
+      {required final List<RadioStation> allStations,
+      final List<RadioStation>? lastAddedStationsPortion,
       final bool hasReachedEnd}) = _$RadioStationsLoadedStateImpl;
 
-  List<RadioStation> get stations;
+  List<RadioStation> get allStations;
+  List<RadioStation>? get lastAddedStationsPortion;
   bool get hasReachedEnd;
   @JsonKey(ignore: true)
   _$$RadioStationsLoadedStateImplCopyWith<_$RadioStationsLoadedStateImpl>
@@ -534,7 +574,7 @@ class __$$RadioStationsLoadingStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$RadioStationsLoadingStateImpl implements _RadioStationsLoadingState {
+class _$RadioStationsLoadingStateImpl implements RadioStationsLoadingState {
   const _$RadioStationsLoadingStateImpl();
 
   @override
@@ -555,7 +595,8 @@ class _$RadioStationsLoadingStateImpl implements _RadioStationsLoadingState {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<RadioStation> stations, bool hasReachedEnd)
+    required TResult Function(List<RadioStation> allStations,
+            List<RadioStation>? lastAddedStationsPortion, bool hasReachedEnd)
         loaded,
     required TResult Function() loading,
     required TResult Function(String message) error,
@@ -566,7 +607,9 @@ class _$RadioStationsLoadingStateImpl implements _RadioStationsLoadingState {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(List<RadioStation> stations, bool hasReachedEnd)? loaded,
+    TResult? Function(List<RadioStation> allStations,
+            List<RadioStation>? lastAddedStationsPortion, bool hasReachedEnd)?
+        loaded,
     TResult? Function()? loading,
     TResult? Function(String message)? error,
   }) {
@@ -576,7 +619,9 @@ class _$RadioStationsLoadingStateImpl implements _RadioStationsLoadingState {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<RadioStation> stations, bool hasReachedEnd)? loaded,
+    TResult Function(List<RadioStation> allStations,
+            List<RadioStation>? lastAddedStationsPortion, bool hasReachedEnd)?
+        loaded,
     TResult Function()? loading,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -590,9 +635,9 @@ class _$RadioStationsLoadingStateImpl implements _RadioStationsLoadingState {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_RadioStationsLoadedState value) loaded,
-    required TResult Function(_RadioStationsLoadingState value) loading,
-    required TResult Function(_RadioStationsErrorState value) error,
+    required TResult Function(RadioStationsLoadedState value) loaded,
+    required TResult Function(RadioStationsLoadingState value) loading,
+    required TResult Function(RadioStationsErrorState value) error,
   }) {
     return loading(this);
   }
@@ -600,9 +645,9 @@ class _$RadioStationsLoadingStateImpl implements _RadioStationsLoadingState {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_RadioStationsLoadedState value)? loaded,
-    TResult? Function(_RadioStationsLoadingState value)? loading,
-    TResult? Function(_RadioStationsErrorState value)? error,
+    TResult? Function(RadioStationsLoadedState value)? loaded,
+    TResult? Function(RadioStationsLoadingState value)? loading,
+    TResult? Function(RadioStationsErrorState value)? error,
   }) {
     return loading?.call(this);
   }
@@ -610,9 +655,9 @@ class _$RadioStationsLoadingStateImpl implements _RadioStationsLoadingState {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_RadioStationsLoadedState value)? loaded,
-    TResult Function(_RadioStationsLoadingState value)? loading,
-    TResult Function(_RadioStationsErrorState value)? error,
+    TResult Function(RadioStationsLoadedState value)? loaded,
+    TResult Function(RadioStationsLoadingState value)? loading,
+    TResult Function(RadioStationsErrorState value)? error,
     required TResult orElse(),
   }) {
     if (loading != null) {
@@ -622,8 +667,8 @@ class _$RadioStationsLoadingStateImpl implements _RadioStationsLoadingState {
   }
 }
 
-abstract class _RadioStationsLoadingState implements RadioStationsState {
-  const factory _RadioStationsLoadingState() = _$RadioStationsLoadingStateImpl;
+abstract class RadioStationsLoadingState implements RadioStationsState {
+  const factory RadioStationsLoadingState() = _$RadioStationsLoadingStateImpl;
 }
 
 /// @nodoc
@@ -662,7 +707,7 @@ class __$$RadioStationsErrorStateImplCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$RadioStationsErrorStateImpl implements _RadioStationsErrorState {
+class _$RadioStationsErrorStateImpl implements RadioStationsErrorState {
   const _$RadioStationsErrorStateImpl(this.message);
 
   @override
@@ -694,7 +739,8 @@ class _$RadioStationsErrorStateImpl implements _RadioStationsErrorState {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(List<RadioStation> stations, bool hasReachedEnd)
+    required TResult Function(List<RadioStation> allStations,
+            List<RadioStation>? lastAddedStationsPortion, bool hasReachedEnd)
         loaded,
     required TResult Function() loading,
     required TResult Function(String message) error,
@@ -705,7 +751,9 @@ class _$RadioStationsErrorStateImpl implements _RadioStationsErrorState {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(List<RadioStation> stations, bool hasReachedEnd)? loaded,
+    TResult? Function(List<RadioStation> allStations,
+            List<RadioStation>? lastAddedStationsPortion, bool hasReachedEnd)?
+        loaded,
     TResult? Function()? loading,
     TResult? Function(String message)? error,
   }) {
@@ -715,7 +763,9 @@ class _$RadioStationsErrorStateImpl implements _RadioStationsErrorState {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(List<RadioStation> stations, bool hasReachedEnd)? loaded,
+    TResult Function(List<RadioStation> allStations,
+            List<RadioStation>? lastAddedStationsPortion, bool hasReachedEnd)?
+        loaded,
     TResult Function()? loading,
     TResult Function(String message)? error,
     required TResult orElse(),
@@ -729,9 +779,9 @@ class _$RadioStationsErrorStateImpl implements _RadioStationsErrorState {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_RadioStationsLoadedState value) loaded,
-    required TResult Function(_RadioStationsLoadingState value) loading,
-    required TResult Function(_RadioStationsErrorState value) error,
+    required TResult Function(RadioStationsLoadedState value) loaded,
+    required TResult Function(RadioStationsLoadingState value) loading,
+    required TResult Function(RadioStationsErrorState value) error,
   }) {
     return error(this);
   }
@@ -739,9 +789,9 @@ class _$RadioStationsErrorStateImpl implements _RadioStationsErrorState {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult? Function(_RadioStationsLoadedState value)? loaded,
-    TResult? Function(_RadioStationsLoadingState value)? loading,
-    TResult? Function(_RadioStationsErrorState value)? error,
+    TResult? Function(RadioStationsLoadedState value)? loaded,
+    TResult? Function(RadioStationsLoadingState value)? loading,
+    TResult? Function(RadioStationsErrorState value)? error,
   }) {
     return error?.call(this);
   }
@@ -749,9 +799,9 @@ class _$RadioStationsErrorStateImpl implements _RadioStationsErrorState {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_RadioStationsLoadedState value)? loaded,
-    TResult Function(_RadioStationsLoadingState value)? loading,
-    TResult Function(_RadioStationsErrorState value)? error,
+    TResult Function(RadioStationsLoadedState value)? loaded,
+    TResult Function(RadioStationsLoadingState value)? loading,
+    TResult Function(RadioStationsErrorState value)? error,
     required TResult orElse(),
   }) {
     if (error != null) {
@@ -761,8 +811,8 @@ class _$RadioStationsErrorStateImpl implements _RadioStationsErrorState {
   }
 }
 
-abstract class _RadioStationsErrorState implements RadioStationsState {
-  const factory _RadioStationsErrorState(final String message) =
+abstract class RadioStationsErrorState implements RadioStationsState {
+  const factory RadioStationsErrorState(final String message) =
       _$RadioStationsErrorStateImpl;
 
   String get message;
